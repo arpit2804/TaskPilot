@@ -3,10 +3,11 @@ const {sequelize} = require('../postgresDB/connect');
 
 const User = sequelize.define(
   'User', {
-    userID: {
-      type: DataTypes.UUID.V4,
-      defaultValue: sql.uuidV4,
-      primaryKey: true
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: Sequelize.UUIDV1, // Use Sequelize's UUIDV1 to generate UUIDs
+      allowNull: false,
+      primaryKey:true,
     },
     name:{
       type: DataTypes.STRING,
@@ -17,11 +18,14 @@ const User = sequelize.define(
       allowNull: false,
       unique: true,
       validate: {
-        isPhoneNumber(value) {
-          if (!/^\+(?:[0-9] ?){6,14}[0-9]$/.test(value)) {
-            throw new Error('Invalid phone number');
-          }
+    isTenDigitPhoneNumber(value) {
+      // Remove any non-digit characters from the input
+        const phoneNumberDigits = value.replace(/\D/g, '');
+      // Check if the resulting string has exactly 10 digits
+        if (phoneNumberDigits.length !== 10) {
+        throw new Error('Phone number must be exactly 10 digits long');
         }
+       }
       }
     },
     email: {

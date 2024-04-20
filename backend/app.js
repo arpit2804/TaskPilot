@@ -2,7 +2,10 @@ const express = require ('express');
 const app = express();
 require('dotenv').config();
 const {sequelize} = require('./postgresDB/connect');
+const authRouter = require('./routes/auth');
 
+app.use(express.json());
+app.use('/api/v1/auth',authRouter);
 //db connection
 
 //middlewares

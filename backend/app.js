@@ -1,7 +1,7 @@
 const express = require ('express');
 const app = express();
 require('dotenv').config();
-const {connectDB} = require('./postgresDB/connect');
+const {sequelize} = require('./postgresDB/connect');
 
 //db connection
 
@@ -17,7 +17,8 @@ const port = process.env.PORT || 3000;
 
 const start =async ()=>{
   try {
-    await connectDB(process.env.SEQUELIZE_URI)
+    await sequelize.authenticate();
+    console.log('connection has been established successfully. ')
     app.listen(port, () =>
       console.log(`Server is listening on port ${port}...`)
     );

@@ -2,10 +2,12 @@ const express = require ('express');
 const app = express();
 require('dotenv').config();
 const {sequelize} = require('./postgresDB/connect');
+const taskRouter  = require('./routes/task');
 
 //db connection
 
 //middlewares
+app.use('/tasks',taskRouter);
 
 //routes
 app.get('/',(req,res)=>{

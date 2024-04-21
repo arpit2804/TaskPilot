@@ -10,7 +10,7 @@ app.use('/api/v1/auth',authRouter);
 //db connection
 
 //middlewares
-app.use('/tasks',taskRouter);
+app.use('/api/v1/tasks',taskRouter);
 
 //routes
 app.get('/',(req,res)=>{

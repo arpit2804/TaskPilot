@@ -1,7 +1,7 @@
 const {Sequelize, Model,DataTypes} = require('sequelize');
 const {sequelize} = require('../postgresDB/connect');
 const bcrypt = require('bcryptjs');
-
+const Task = require('./tasks');
 
 const User = sequelize.define(
   'User', {
@@ -49,6 +49,14 @@ const User = sequelize.define(
     }
   }
 )
+
+User.hasMany(Task,{
+  foreignKey:{
+    type: DataTypes.UUID,
+    allowNull:false,
+  },
+});
+Task.belongsTo(User);
 
 User.beforeCreate(async (user,options) =>{
   const salt = await bcrypt.genSalt(10);

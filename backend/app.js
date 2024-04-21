@@ -2,10 +2,22 @@ const express = require ('express');
 const app = express();
 require('dotenv').config();
 const {sequelize} = require('./postgresDB/connect');
+const {DataTypes} = require('sequelize');
 //routes import
 const authRouter = require('./routes/auth');
 const taskRouter  = require('./routes/task');
 const classRouter = require('./routes/class');
+
+//importing models
+const User = require('./models/user');
+const Task = require('./models/tasks');
+User.hasMany(Task,{
+  foreignKey:{
+    type: DataTypes.UUID,
+    allowNull:false,
+  },
+});
+Task.belongsTo(User);
 
 //authentication middleware
 const authenticateUser = require('./middleware/authMiddleware');

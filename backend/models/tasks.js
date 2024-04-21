@@ -1,28 +1,25 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const {sequelize }= require('../postgresDB/connect');
-
+const User = require('./user');
 
 const Task = sequelize.define(
     'Task',
     {
-        // taskID : {
-        //     type : DataTypes.UUID.V4,
-        //     defaultValue : sql.uuidV4,
-        //     allowNull : false,
-        //     primaryKey : true,
-        // },
+        taskid: {
+        type: DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1, // Use Sequelize's UUIDV1 to generate UUIDs
+        allowNull: false,
+        primaryKey:true,
+        },
         // userID : {
         //     type : DataTypes.UUID.V4,
         //     defaultValue : sql.uuidV4,
         //     allowNull : false,
         // },
-        endTime : {
-            type : DataTypes.TIME,
-            allowNull : false,
-        },
         endDate : {
             type : DataTypes.DATE,
             allowNull : false,
+            isDate: true,
         },
         name : {
             type : DataTypes.STRING,
@@ -32,13 +29,15 @@ const Task = sequelize.define(
             type : DataTypes.TEXT,
             defaultValue: "No Description Provided",
         },
-        isCompleted : {
-            type : DataTypes.BOOLEAN,
-            defaultValue: false,
+        status: {
+            type : DataTypes.ENUM,
+            values: ['pending','active','completed','missed'],
+            defaultValue: 'pending',
         },
     }
     
 );
+
 
 async function syncDatabase() {
     try {

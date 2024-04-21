@@ -2,20 +2,20 @@ const express = require ('express');
 const app = express();
 require('dotenv').config();
 const {sequelize} = require('./postgresDB/connect');
+//routes import
 const authRouter = require('./routes/auth');
 const taskRouter  = require('./routes/task');
+const classRouter = require('./routes/class');
 
-app.use(express.json());
-app.use('/api/v1/auth',authRouter);
-//db connection
+//authentication middleware
+const authenticateUser = require('./middleware/authMiddleware');
 
 //middlewares
-app.use('/api/v1/tasks',taskRouter);
-
+app.use(express.json());
 //routes
-app.get('/',(req,res)=>{
-  res.send('hello users');
-})
+app.use('/api/v1/auth',authRouter);
+app.use('/api/v1/tasks',authenticateUser,taskRouter);
+app.use('/api/v1/classes',authenticateUser,classRouter);
 //app listen
 
 const port = process.env.PORT || 3000;

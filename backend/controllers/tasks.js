@@ -1,6 +1,7 @@
 const Task = require('../models/tasks');
+const {StatusCodes} = require('http-status-codes');
 
-const date = new Date(2024,3,22,15,30,0);
+//const date = new Date(2024,3,22,15,30,0);
 
 const getTasks = async(req,res) => {
     res.send("hello get");
@@ -8,10 +9,13 @@ const getTasks = async(req,res) => {
 
 
 const createTasks = async(req,res) =>{
-    const {userId} = req.user;
-    const task = await Task.create({...req.body,endDate:date,UserId:userId});
-    res.status(201).json(task);
-    //res.send("hello post");
+    const {UserId} = req.user;
+    const{date,month,year} = req.body;
+    const endDate = new Date(date,month,year);
+
+    const task = await Task.create({...req.body,endDate,UserId});
+
+    res.status(StatusCodes.CREATED).json({task});
 }
 
 const editTasks = async(req,res) => {

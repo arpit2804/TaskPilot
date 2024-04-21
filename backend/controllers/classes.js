@@ -3,6 +3,9 @@ const getClass = async(req,res) => {
     res.send("hello get");
 }
 
+const getOneClass = async(req,res) =>{
+    res.send("hello get one");
+}
 
 const createClass = async(req,res) =>{
     res.send("hello post");
@@ -18,6 +21,7 @@ const deleteClass = async(req,res) =>{
 
 module.exports = {
 getClass,
+getOneClass,
 createClass,
 editClass,
 deleteClass

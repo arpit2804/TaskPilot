@@ -1,6 +1,7 @@
 import React from 'react'
 import logo from '../assets/taskpilot.png'
 import banner from '../assets/Login_banner.png'
+import { Link } from 'react-router-dom';
 
 export default function Login() {
     return (
@@ -17,7 +18,9 @@ export default function Login() {
                 HOME
               </button>
               <button className="text-black font-semibold bg-gradient-to-r from-[#ff6cab] via-[#BD69D2] to-[#7766FD] hover:scale-110 duration-300 rounded-lg px-6 py-1 mx-3">
+                <Link to='/'>
                 SIGNUP
+                </Link>
               </button>
             </div>
           </div>

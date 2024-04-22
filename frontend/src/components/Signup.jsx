@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import logo from '../assets/taskpilot.png'
 import banner from '../assets/Login_banner.png'
 import { FaRegUser } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 export default function Signup() {
 
@@ -32,7 +33,7 @@ export default function Signup() {
             })
             .then(res=>res.json()).then((result)=>{
                 console.log(result)
-                window.href.replace('/')
+                window.location.replace('/home')
             })
         } catch (error) {
             console.log("error",error);
@@ -54,7 +55,9 @@ export default function Signup() {
                 HOME
               </button>
               <button className="text-black font-semibold bg-gradient-to-r from-[#ff6cab] via-[#BD69D2] to-[#7766FD] hover:scale-110 duration-300 rounded-lg px-6 py-1 mx-3">
+                <Link to='/login'>
                 Login
+                </Link>
               </button>
             </div>
           </div>

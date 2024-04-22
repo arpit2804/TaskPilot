@@ -17,7 +17,7 @@ function App() {
       <Routes>
       <Route exact path = '/classes' element = {<Classes/>}/>
       <Route exact path = '/login' element = {<Login/>}/>
-      <Route exact path = '/signup' element = {<Signup/>}/>
+      <Route exact path = '/' element = {<Signup/>}/>
       <Route exact path = '/home' element={<TaskClass/>}/>
       <Route exact path = '/tasks' element = {<Tasks/>}/>
   

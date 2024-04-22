@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useDrag, useDrop } from 'react-dnd';
 import { MdDelete } from "react-icons/md";
+import { Link } from 'react-router-dom';
+import ViewTask from '../components/ViewTask'
 
 export default function ListTasks({ tasks, setTasks }) {
     const [pending, setPending] = useState([]);
@@ -93,7 +95,7 @@ const Section = ({ status,
             </div>
             <div>
 
-                {taskstomap.length > 0 && taskstomap.map((task) => <Task key={task.id} tasks={tasks} setTasks={setTasks} task={task} />)}
+                {taskstomap.length > 0 && taskstomap.map((task) => <Task key={task.id}  task={task} />)}
             </div>
 
         </div>
@@ -111,7 +113,11 @@ const Header = ({ text, bg, count }) => {
     )
 }
 
-const Task = ({ tasks, setTasks, task }) => {
+const Task = ({ task }) => {
+
+    const [showMyModel, setShowMyModal] = useState(false);
+    const handleOnClose = () => setShowMyModal(false);
+
     const [{ isDragging }, drag] = useDrag(() => ({
         type: "task",
         item: {id: task.id},
@@ -125,16 +131,22 @@ const Task = ({ tasks, setTasks, task }) => {
 
     //   console.log(<isDragging></isDragging>)
     return (
+        <div onDoubleClick={() => setShowMyModal(true)}>
         <div
             // onClick={}
             ref={drag}
-            className={`relative p-4 mt-4 shadow-md text-white font-bold bg-[#1f1f1f] rounded-md cursor-grab ${isDragging ? "opacity-25" : "opacity-100"} hover:scale-110 duration-300`}>
+            className={`relative p-4 mt-4 shadow-md text-white font-bold bg-[#1f1f1f] rounded-md cursor-grab ${isDragging ? "opacity-25" : "opacity-100"} hover:scale-110 duration-300`}
+            
+            >
+            
             <div className='flex justify-between items-center'>
             <p>{task.name}</p>
             <button>
                 <div className=' text-red-600 text-xl'><MdDelete/></div>
             </button>
             </div>
+            </div>
+            <ViewTask onClose={handleOnClose} visible={showMyModel} task = {task} />
         </div>
     )
 }

@@ -81,7 +81,21 @@ const editTasks = async(req,res) => {
 }
 
 const deleteTasks = async(req,res) =>{
-    res.send("hello delete");
+    const{
+        user: {userId},
+        params:{id: taskId},
+    } = req;
+
+    const task = await Task.destroy({
+        where:{
+            [Op.and] :[{UserId:userId},{taskid:taskId}],
+        },
+    });
+
+    if (!task) {
+    throw new NotFoundError(`No job with id ${taskId}`);
+  }
+   res.status(StatusCodes.OK).send('record deleted');
 }
 
 module.exports = {

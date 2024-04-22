@@ -32,7 +32,8 @@ export default function Signup() {
                 body: JSON.stringify(data),
             })
             .then(res=>res.json()).then((result)=>{
-                console.log(result)
+                console.log(result);
+                localStorage.setItem('jwt',result.token);
                 window.location.replace('/home')
             })
         } catch (error) {

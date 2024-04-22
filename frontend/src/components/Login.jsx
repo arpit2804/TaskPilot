@@ -1,9 +1,40 @@
-import React from 'react'
+import React, { useState } from 'react'
 import logo from '../assets/taskpilot.png'
 import banner from '../assets/Login_banner.png'
 import { Link } from 'react-router-dom';
 
 export default function Login() {
+
+  const [email,setEmail] = useState("");
+  const [password,setPassword] = useState("");
+  
+  const handleSubmit = async(e)=>{
+    e.preventDefault()
+    const data = {
+      email,password
+    }
+    console.log(data);
+    try {
+            
+            await fetch('http://localhost:3000/api/v1/auth/login',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json;charset=utf-8',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(res=>res.json()).then((result)=>{
+                console.log(result);
+                localStorage.setItem('jwt',result.token);
+                //window.href.replace('/')
+            })
+    } catch (error) {
+            console.log("error",error);
+        }
+  }
+
+
     return (
         <div className="h-screen bg-black">
           <div className="flex justify-between">
@@ -24,6 +55,7 @@ export default function Login() {
               </button>
             </div>
           </div>
+          <form onSubmit={handleSubmit}>
           <div className="bg-[#1f1f1f] h-[75%] my-[3rem] mx-[12rem] rounded-2xl flex flex-col items-center">
             <div className="text-[2.7rem] text-white mt-2">LOGIN</div>
             <div className="flex items-center justify-center w-full my-7">
@@ -31,12 +63,18 @@ export default function Login() {
                 <div className="flex flex-col w-full items-center justify-around h-[80%]">
                   <input
                     placeholder="E-mail"
-                    className="w-[75%] bg-[#1f1f1f] text-[#A1A1A1] border-0 border-b-2 border-[#A1A1A1] placeholder:text-[#A1A1A1] text-xl placeholder:text-2xl placeholder:text-center"
+                    onChange={(e)=>{
+                        setEmail(e.target.value)
+                    }} 
+                    className="w-[75%] bg-[#1f1f1f] text-[#A1A1A1] border-0 border-b-2 border-[#A1A1A1] focus:outline-none placeholder:text-[#A1A1A1] text-xl placeholder:text-2xl placeholder:text-center"
                   />
                   <div className="w-full flex flex-col justify-center items-center gap-[1rem]">
                     <input
                       placeholder="Password"
-                      className="w-[75%] bg-[#1f1f1f] text-[#A1A1A1] border-0 border-b-2 border-[#A1A1A1] placeholder:text-[#A1A1A1] text-xl placeholder:text-2xl placeholder:text-center"
+                        onChange={(e)=>{
+                        setPassword(e.target.value)
+                    }}
+                      className="w-[75%] bg-[#1f1f1f] text-[#A1A1A1] border-0 border-b-2 border-[#A1A1A1] focus:outline-none placeholder:text-[#A1A1A1] text-xl placeholder:text-2xl placeholder:text-center"
                     />
                     <div className=" text-white w-[75%]">
                       By proceeding, You agree with our{" "}
@@ -48,7 +86,9 @@ export default function Login() {
                   </div>
                 </div>
                 <div className="h-[20%] flex flex-col justify-end">
-                  <button className="py-1 px-12 text-black font-semibold bg-gradient-to-r from-[#ff6cab] via-[#BD69D2] to-[#7766FD] rounded-3xl text-xl hover:scale-110 duration-300">
+                  <button 
+                  type='submit'
+                  className="py-1 px-12 text-black font-semibold bg-gradient-to-r from-[#ff6cab] via-[#BD69D2] to-[#7766FD] rounded-3xl text-xl hover:scale-110 duration-300">
                     Login
                   </button>
                 </div>
@@ -58,6 +98,7 @@ export default function Login() {
               </div>
             </div>
           </div>
+          </form>
         </div>
       );
 }

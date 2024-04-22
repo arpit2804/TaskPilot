@@ -10,8 +10,32 @@ import logo from '../assets/taskpilot.png'
 
 export default function Tasks() {
     const [tasks, setTasks] = useState([]);
+    const token = localStorage.getItem('jwt');
 
-    console.log("tasks",tasks);
+    useEffect(()=>{
+          const fetchTasks = async ()=>{
+      try {
+          await fetch('http://localhost:3000/api/v1/tasks',
+          {
+              method: 'GET',
+              headers: {
+                  'Content-Type' : 'application/json;charset=utf-8',
+                  'Authorization' : `Bearer ${token}`
+              },
+          })
+          .then(res=>res.json()).then((result)=>{
+              console.log(result);
+              setTasks(result.tasks);
+          })
+      } catch (error) {
+          console.log("error",error);
+      }
+    }
+     fetchTasks();
+    },[]);
+
+
+    //console.log("tasks",tasks);
   
     return (
       <>

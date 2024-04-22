@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect,useState} from 'react'
 import {v4 as uuidv4} from 'uuid';
 
 export default function CreatenewTask({ visible, onClose, tasks, setTasks }) {
@@ -7,6 +7,7 @@ export default function CreatenewTask({ visible, onClose, tasks, setTasks }) {
     const [taskDescription, setTaskDescription] = useState("");
     const [deadline, setDeadline] = useState(new Date());
 
+    const token = localStorage.getItem('jwt');
     const handleOnClose = (e) => {
         if (e.target.id === "container") {
             onClose();
@@ -14,28 +15,74 @@ export default function CreatenewTask({ visible, onClose, tasks, setTasks }) {
         }
     };
 
-    const [task, setTask] = useState({
-        id : "",
-        name : "",
-        description: "",
-        deadline: "",
-        status: "pending",
-    })
+    // const [task, setTask] = useState({
+    //     name : "",
+    //     description: "",
+    //     deadline: "",
+    //     status: "pending",
+    // })
+
+    const createTask = async (data)=>{
+      try {
+          await fetch('http://localhost:3000/api/v1/tasks',
+          {
+              method: 'POST',
+              headers: {
+                  'Content-Type' : 'application/json;charset=utf-8',
+                  'Authorization' : `Bearer ${token}`
+              },
+              body : JSON.stringify(data),
+          })
+          .then(res=>res.json()).then((result)=>{
+              console.log(result);
+              return result.task;
+              //setTasks(result.tasks);
+          })
+      } catch (error) {
+          console.log("error",error);
+      }
+    }
+
+    const fetchTasks = async ()=>{
+      try {
+          await fetch('http://localhost:3000/api/v1/tasks',
+          {
+              method: 'GET',
+              headers: {
+                  'Content-Type' : 'application/json;charset=utf-8',
+                  'Authorization' : `Bearer ${token}`
+              },
+          })
+          .then(res=>res.json()).then((result)=>{
+              console.log(result);
+              setTasks(result.tasks);
+          })
+      } catch (error) {
+          console.log("error",error);
+      }
+    }
 
     //console.log(task)
 
     const handleSubmit = (e) =>{
         e.preventDefault();
-        task.name = taskName,
-        task.description = taskDescription,
-        task.deadline = deadline,
-        task.id = uuidv4(),
-
-        setTasks((prev)=>{
-            const list = [...prev,task];
-            return list
-        })
-        document.getElementById("container").click();
+        // task.name = taskName,
+        // task.description = taskDescription,
+        // task.deadline = deadline,
+        console.log(deadline);
+        const data = {
+            name : taskName,
+            description: taskDescription,
+            year: Number(deadline.split('-')[0]),
+            month:Number(deadline.split('-')[1]),
+            date: Number(deadline.split('-')[2])
+        }
+         const newTask = createTask(data);
+         //setTasks(prevTasks => [...prevTasks,newTask]);
+         //     return list
+         // })
+         document.getElementById("container").click();
+         fetchTasks();
     }
 
     if (!visible) return null;

@@ -3,16 +3,19 @@ const app = express();
 require('dotenv').config();
 const {sequelize} = require('./postgresDB/connect');
 const {DataTypes} = require('sequelize');
+const cors = require('cors')
 //routes import
 const authRouter = require('./routes/auth');
 const taskRouter  = require('./routes/task');
 const classRouter = require('./routes/class');
 
 
+
 //authentication middleware
 const authenticateUser = require('./middleware/authMiddleware');
 
 //middlewares
+app.use(cors());
 app.use(express.json());
 //routes
 app.use('/api/v1/auth',authRouter);

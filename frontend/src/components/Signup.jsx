@@ -9,7 +9,7 @@ export default function Signup() {
             <div>
               <img
                 src={logo}
-                className="pr-3 pl-5 h-14 pt-4 cursor-pointer hover:scale-105 duration-300 "
+                className="pr-3 pl-5 h-12 w-44 pt-4 cursor-pointer hover:scale-105 duration-300 "
               />
             </div>
             <div className="mt-4 pr-6">

@@ -15,7 +15,7 @@ export default function Tasks() {
     <div className='h-screen bg-black'>
       <DndProvider backend={HTML5Backend}>
         {/* logo */}
-        <div className='h-16 w-40 p-4'>
+        <div className='h-24 w-56 p-4'>
             <img src={logo}/>
         </div>
         {/* header */}

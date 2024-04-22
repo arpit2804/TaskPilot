@@ -9,7 +9,7 @@ export default function Login() {
             <div>
               <img
                 src={logo}
-                className="pr-3 pl-5 h-14 pt-4 cursor-pointer hover:scale-105 duration-300 "
+                className="pr-3 pl-5 h-12 w-44 pt-4 cursor-pointer hover:scale-105 duration-300 "
               />
             </div>
             <div className="mt-4 pr-6">
@@ -27,7 +27,7 @@ export default function Login() {
               <div className="flex flex-col items-center w-[50%] justify-around h-[100%] border-r-2 border-[#A1A1A1] px-4 py-6 pt-14">
                 <div className="flex flex-col w-full items-center justify-around h-[80%]">
                   <input
-                    placeholder="E-mail/Phone"
+                    placeholder="E-mail"
                     className="w-[75%] bg-[#1f1f1f] text-[#A1A1A1] border-0 border-b-2 border-[#A1A1A1] placeholder:text-[#A1A1A1] text-xl placeholder:text-2xl placeholder:text-center"
                   />
                   <div className="w-full flex flex-col justify-center items-center gap-[1rem]">

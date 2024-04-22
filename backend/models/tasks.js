@@ -38,6 +38,10 @@ const Task = sequelize.define(
     
 );
 
+Task.beforeUpdate((instance, options) => {
+    return instance.validate(); 
+});
+
 
 async function syncDatabase() {
     try {

@@ -30,7 +30,7 @@ const getOneTask = async(req,res) => {
   });
 
   if (!task) {
-    throw new NotFoundError(`No job with id ${taskId}`);
+    throw new NotFoundError(`No task with id ${taskId}`);
   }
   res.status(StatusCodes.OK).json({ task });
 }
@@ -93,7 +93,7 @@ const deleteTasks = async(req,res) =>{
     });
 
     if (!task) {
-    throw new NotFoundError(`No job with id ${taskId}`);
+    throw new NotFoundError(`No task with id ${taskId}`);
   }
    res.status(StatusCodes.OK).send('record deleted');
 }

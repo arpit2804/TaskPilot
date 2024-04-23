@@ -5,6 +5,7 @@ import CreateTasks from '../components/CreateTasks';
 import ListTasks from '../components/ListTasks';
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
+import { Link } from 'react-router-dom';
 import logo from '../assets/taskpilot.png'
 //import ViewTask from './ViewTask';
 
@@ -50,8 +51,11 @@ export default function Tasks() {
     <div className='h-screen bg-black'>
       <DndProvider backend={HTML5Backend}>
         {/* logo */}
+        
         <div className='h-24 w-56 p-4'>
+        <Link to='/home'>
             <img src={logo}/>
+            </Link>
         </div>
         {/* header */}
         <div className='flex justify-center items-center w-full'>

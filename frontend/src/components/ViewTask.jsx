@@ -27,7 +27,7 @@ export default function CreatenewTask({ visible, onClose, task }) {
                     </div>
                 </div>
                 {/* Name */}
-                <div className=' p-2  text-white font-poppins text-xl font-bold  mt-3'>Task Name</div>
+                <div className=' p-2  text-white font-poppins text-xl font-bold  mt-3'>{task.name}</div>
 
                 {/* description */}
                 {edit ? <div>
@@ -39,10 +39,10 @@ export default function CreatenewTask({ visible, onClose, task }) {
                         />
                     </div>
                 </div>
-                    : <div className='p-2 text-white  font-poppins text-sm font-semibold w mt-3'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum unde facere dignissimos deserunt tempora, neque veniam, ipsa expedita praesentium sequi eum alias similique?</div>}
+                    : <div className='p-2 text-white  font-poppins text-sm font-semibold w mt-3'>{task.description}</div>}
 
                 {/* deadline */}
-                <div className='text-sm text-red-500 mt-4 font-semibold'> Deadline: 22-04-24</div>
+                <div className='text-sm text-red-500 mt-4 font-semibold'> Deadline: {task.endDate.split('T')[0]}</div>
                 {/* buttons */}
                 <div className='flex justify-between mt-4 items-center gap-3'>
                     <button

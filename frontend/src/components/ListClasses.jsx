@@ -155,8 +155,15 @@ const Task = ({ classes, setClasses, task,setDeleted }) => {
             // onClick={}
             ref={drag}
             className={`relative p-4 mt-4 shadow-md text-white font-bold bg-[#1f1f1f] rounded-md cursor-grab ${isDragging ? "opacity-25" : "opacity-100"} hover:scale-110 duration-300`}>
-            <div className='flex justify-between items-center'>
+            <div className='flex items-center justify-between'>
+            <div className='flex-col'>
             <p>{task.name}</p>
+            <div className='flex gap-2 mt-2'>
+                <div className='text-white text-[10px] font-semibold'>Start Time: {task.endTime}</div>
+                <div className='text-white text-[10px] font-semibold'>End Time: {task.endTime} </div>
+            </div>
+            <div className='text-white text-[10px] font-semibold mt-2'>Deadline: {task.Date} </div>
+            </div>
             <button>
                 <div className=' text-red-600 text-xl'><MdDelete onClick={()=>handleDelete(task.classId)}/></div>
             </button>

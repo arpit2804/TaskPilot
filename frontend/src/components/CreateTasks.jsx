@@ -3,7 +3,7 @@ import {v4 as uuidv4} from 'uuid';
 import { FaPlus } from "react-icons/fa";
 import CreatenewTask from './CreatenewTask';
 
-function CreateTasks({tasks, setTasks}) {
+function CreateTasks({tasks, setTasks,setCreated}) {
 
 
     const [showMyModel, setShowMyModal] = useState(false);
@@ -23,7 +23,7 @@ function CreateTasks({tasks, setTasks}) {
             </div>
         </button>
         </div>
-        <CreatenewTask onClose={handleOnClose} visible={showMyModel} tasks = {tasks} setTasks = {setTasks}/>
+        <CreatenewTask onClose={handleOnClose} visible={showMyModel} tasks = {tasks} setTasks = {setTasks} setCreated={setCreated}/>
     
     </div>
   )

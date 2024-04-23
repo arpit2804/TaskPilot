@@ -111,7 +111,7 @@ const deleteClass = async(req,res) =>{
     if (!oldclass) {
     throw new NotFoundError(`No class with id ${classId}`);
   }
-   res.status(StatusCodes.OK).send('record deleted');
+   res.status(StatusCodes.OK).json({deleted:true});
 }
 
 module.exports = {

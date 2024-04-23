@@ -4,7 +4,7 @@ import { MdDelete } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import ViewTask from '../components/ViewTask'
 
-export default function ListTasks({ tasks, setTasks }) {
+export default function ListTasks({ tasks, setTasks , setDeleted }) {
     const [pending, setPending] = useState([]);
     const [missed, setMissed] = useState([]);
     const [ongoing, setOngoing] = useState([]);
@@ -27,7 +27,7 @@ export default function ListTasks({ tasks, setTasks }) {
         <div>
             <div className='flex justify-around mx-5 mt-10 items-start  '>
                 {statuses.map((status, index) => <Section key={index} status={status} tasks={tasks} setTasks={setTasks} pending={pending}
-                    ongoing={ongoing} completed={completed} missed={missed} />)}
+                    ongoing={ongoing} completed={completed} missed={missed} setDeleted={setDeleted} />)}
             </div>
         </div>
     )
@@ -40,6 +40,7 @@ const Section = ({ status,
     ongoing,
     completed,
     missed,
+    setDeleted
 }) => {
 
     const [{ isOver }, drop] = useDrop(() => ({
@@ -79,7 +80,7 @@ const Section = ({ status,
     const addItemToSection = (id) =>{
         setTasks((prev)=>{
             const mTasks = prev.map(t=>{
-                if(t.id === id){
+                if(t.taskid === id){
                     return {...t, status: status}
                 }
                 return t;
@@ -88,6 +89,8 @@ const Section = ({ status,
         })
     }
 
+
+
     return (
         <div ref={drop} className={`w-64 rounded-md ${isOver? "bg-slate-200": " bg-transparent"} p-2`}>
             <div className='flex items-center justify-center '>
@@ -95,7 +98,7 @@ const Section = ({ status,
             </div>
             <div>
 
-                {taskstomap.length > 0 && taskstomap.map((task) => <Task key={task.id}  task={task} />)}
+                {taskstomap.length > 0 && taskstomap.map((task) => <Task key={task.taskid}  task={task} setDeleted={setDeleted}/>)}
             </div>
 
         </div>
@@ -113,19 +116,43 @@ const Header = ({ text, bg, count }) => {
     )
 }
 
-const Task = ({ task }) => {
-
+const Task = ({ task , setDeleted}) => {
+    //console.log(task.taskid);
     const [showMyModel, setShowMyModal] = useState(false);
     const handleOnClose = () => setShowMyModal(false);
 
     const [{ isDragging }, drag] = useDrag(() => ({
         type: "task",
-        item: {id: task.id},
+        item: {id: task.taskid},
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging()
         })
     }))
-    // console.log(item.id)
+
+    const handleDelete = async(id)=>{
+        console.log(id);
+        const token = localStorage.getItem('jwt');
+        try {
+          await fetch(`http://localhost:3000/api/v1/tasks/${id}`,
+          {
+              method: 'DELETE',
+              headers: {
+                  'Content-Type' : 'application/json;charset=utf-8',
+                  'Authorization' : `Bearer ${token}`
+              },
+          })
+          .then(res=>res.json()).then((result)=>{
+              console.log(result);
+              setDeleted((prev)=> !prev);
+              //setTasks([...tasks, result.task]);
+              //return result.task;
+          })
+      } catch (error) {
+          console.log("error",error);
+          //setDeleted(true);
+      }
+    }
+    //console.log(item.id)
 
     //console.log(task.id)
 
@@ -142,7 +169,7 @@ const Task = ({ task }) => {
             <div className='flex justify-between items-center'>
             <p>{task.name}</p>
             <button>
-                <div className=' text-red-600 text-xl'><MdDelete/></div>
+                <div className=' text-red-600 text-xl'><MdDelete onClick={()=>handleDelete(task.taskid)} /></div>
             </button>
             </div>
             </div>

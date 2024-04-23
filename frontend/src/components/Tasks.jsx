@@ -10,12 +10,15 @@ import logo from '../assets/taskpilot.png'
 
 export default function Tasks() {
     const [tasks, setTasks] = useState([]);
+    const [created,setCreated] = useState(false);
+    const [deleted,setDeleted] = useState(false);
+
     const token = localStorage.getItem('jwt');
 
     useEffect(()=>{
           const fetchTasks = async ()=>{
       try {
-          await fetch('http://localhost:3000/api/v1/tasks',
+          fetch('http://localhost:3000/api/v1/tasks',
           {
               method: 'GET',
               headers: {
@@ -32,7 +35,7 @@ export default function Tasks() {
       }
     }
      fetchTasks();
-    },[]);
+    },[created,deleted]);
 
 
     //console.log("tasks",tasks);
@@ -56,8 +59,8 @@ export default function Tasks() {
             Navigate Your Tasks With Style!
         </div>
         </div>
-        <CreateTasks tasks = {tasks} setTasks = {setTasks}/>
-        <ListTasks  tasks = {tasks} setTasks = {setTasks}/>
+        <CreateTasks tasks = {tasks} setTasks = {setTasks} setCreated={setCreated}/>
+        <ListTasks  tasks = {tasks} setTasks = {setTasks} setDeleted={setDeleted}/>
       </DndProvider>
       </div>
       </>

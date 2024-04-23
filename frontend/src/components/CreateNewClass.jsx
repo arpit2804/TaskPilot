@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 
-export default function CreateNewClass({ visible, onClose, classes, setClasses }) {
+export default function CreateNewClass({ visible, onClose, classes, setClasses, setCreated }) {
     const [taskName, setTaskName] = useState("");
-    const [taskDescription, setTaskDescription] = useState("");
+    //const [taskDescription, setTaskDescription] = useState("");
+    const [startTime,setStartTime] = useState(null);
+    const [endTime,setEndTime] = useState(null);
     const [deadline, setDeadline] = useState(new Date());
+    const token = localStorage.getItem('jwt');
 
     const handleOnClose = (e) => {
         if (e.target.id === "container") {
@@ -12,27 +15,52 @@ export default function CreateNewClass({ visible, onClose, classes, setClasses }
         }
     };
 
-    const [task, setTask] = useState({
-        id: "",
-        name: "",
-        description: "",
-        deadline: "",
-        status: "pending",
-    })
+    // const [task, setTask] = useState({
+    //     id: "",
+    //     name: "",
+    //     description: "",
+    //     deadline: "",
+    //     status: "pending",
+    // })
 
     //console.log(task)
 
+    const createClass = async (data)=>{
+      try {
+          await fetch('http://localhost:3000/api/v1/classes',
+          {
+              method: 'POST',
+              headers: {
+                  'Content-Type' : 'application/json;charset=utf-8',
+                  'Authorization' : `Bearer ${token}`
+              },
+              body : JSON.stringify(data),
+          })
+          .then(res=>res.json()).then((result)=>{
+              console.log(result);
+               setCreated(true);
+               console.log("true set",Date.now())
+              setClasses([...classes, result.newclass]);
+              return result.newclass;
+          })
+      } catch (error) {
+          console.log("error",error);
+      }
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        task.name = taskName,
-            task.description = taskDescription,
-            task.deadline = deadline,
-            task.id = uuidv4(),
-
-            setClasses((prev) => {
-                const list = [...prev, task];
-                return list
-            })
+        console.log(deadline);
+        const data = {
+            name : taskName,
+            Date: deadline,
+            startTime: startTime,
+            endTime: endTime
+        }
+        console.log(typeof(startTime));
+        console.log(data);
+        const newClass = createClass(data);
+        
         document.getElementById("container").click();
     }
 
@@ -69,7 +97,7 @@ export default function CreateNewClass({ visible, onClose, classes, setClasses }
                                             type="time"
                                             className='border-2 border-slate-200 h-8 w-40 rounded-md px-1 bg-slate-800 '
                                             onChange={(e) => {
-                                                setDeadline(e.target.value)
+                                                setStartTime(e.target.value)
                                             }}
                                         />
                                     </div>
@@ -81,14 +109,14 @@ export default function CreateNewClass({ visible, onClose, classes, setClasses }
                                             type="time"
                                             className='border-2 border-slate-200 h-8 w-40 rounded-md px-1 bg-slate-800 '
                                             onChange={(e) => {
-                                                setDeadline(e.target.value)
+                                                setEndTime(e.target.value)
                                             }}
                                         />
                                     </div>
                                 </div>
                             </div>
                             <div className='flex-col'>
-                                <div className='text-[#ff6cab] font-poppins fonr-bold mt-4'>Task Deadline</div>
+                                <div className='text-[#ff6cab] font-poppins fonr-bold mt-4'>Date Scheduled</div>
                                 <input
                                     type="date"
                                     className='border-2 border-slate-200 h-8 w-40 rounded-md px-1 bg-slate-800 '

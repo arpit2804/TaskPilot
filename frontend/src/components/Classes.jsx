@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import React from 'react';
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -9,8 +9,34 @@ import ListClasses from '../components/ListClasses'
 
 export default function Classes() {
     const [classes, setClasses] = useState([]);
+    const [created,setCreated] = useState(false);
+    const [deleted,setDeleted] = useState(false);
 
-    console.log("classes",classes);
+    const token = localStorage.getItem('jwt');
+
+    useEffect(()=>{
+          const fetchClasses = async ()=>{
+      try {
+           fetch('http://localhost:3000/api/v1/classes',
+          {
+              method: 'GET',
+              headers: {
+                  'Content-Type' : 'application/json;charset=utf-8',
+                  'Authorization' : `Bearer ${token}`
+              },
+          })
+          .then(res=>res.json()).then((result)=>{
+              console.log(result);
+              setClasses(result.classes);
+          })
+      } catch (error) {
+          console.log("error",error);
+      }
+    }
+     fetchClasses();
+    },[created,deleted]);
+
+   // console.log("classes",classes);
   
     return (
     <div className='h-screen bg-black'>
@@ -25,8 +51,8 @@ export default function Classes() {
             Class Schedules Perfected!
         </div>
         </div>
-        <CreateClasses classes = {classes} setClasses = {setClasses}/>
-        <ListClasses  classes = {classes} setClasses = {setClasses}/>
+        <CreateClasses classes = {classes} setClasses = {setClasses} setCreated={setCreated}/>
+        <ListClasses  classes = {classes} setClasses = {setClasses} setDeleted={setDeleted}/>
       </DndProvider>
       </div>
     )

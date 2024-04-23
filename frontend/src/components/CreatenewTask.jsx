@@ -1,7 +1,7 @@
 import React, {useEffect,useState} from 'react'
 import {v4 as uuidv4} from 'uuid';
 
-export default function CreatenewTask({ visible, onClose, tasks, setTasks }) {
+export default function CreatenewTask({ visible, onClose, tasks, setTasks,setCreated }) {
     const [clicked, setClicked] = useState(false);
     const [taskName, setTaskName] = useState("");
     const [taskDescription, setTaskDescription] = useState("");
@@ -35,32 +35,34 @@ export default function CreatenewTask({ visible, onClose, tasks, setTasks }) {
           })
           .then(res=>res.json()).then((result)=>{
               console.log(result);
+              setCreated(true);
+              console.log("true set",Date.now())
+              setTasks([...tasks, result.task]);
               return result.task;
-              //setTasks(result.tasks);
           })
       } catch (error) {
           console.log("error",error);
       }
     }
 
-    const fetchTasks = async ()=>{
-      try {
-          await fetch('http://localhost:3000/api/v1/tasks',
-          {
-              method: 'GET',
-              headers: {
-                  'Content-Type' : 'application/json;charset=utf-8',
-                  'Authorization' : `Bearer ${token}`
-              },
-          })
-          .then(res=>res.json()).then((result)=>{
-              console.log(result);
-              setTasks(result.tasks);
-          })
-      } catch (error) {
-          console.log("error",error);
-      }
-    }
+    // const fetchTasks = async ()=>{
+    //   try {
+    //       await fetch('http://localhost:3000/api/v1/tasks',
+    //       {
+    //           method: 'GET',
+    //           headers: {
+    //               'Content-Type' : 'application/json;charset=utf-8',
+    //               'Authorization' : `Bearer ${token}`
+    //           },
+    //       })
+    //       .then(res=>res.json()).then((result)=>{
+    //           console.log(result);
+    //           setTasks(result.tasks);
+    //       })
+    //   } catch (error) {
+    //       console.log("error",error);
+    //   }
+    // }
 
     //console.log(task)
 
@@ -82,7 +84,7 @@ export default function CreatenewTask({ visible, onClose, tasks, setTasks }) {
          //     return list
          // })
          document.getElementById("container").click();
-         fetchTasks();
+         //fetchTasks();
     }
 
     if (!visible) return null;

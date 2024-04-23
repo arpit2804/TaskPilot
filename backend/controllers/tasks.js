@@ -95,7 +95,7 @@ const deleteTasks = async(req,res) =>{
     if (!task) {
     throw new NotFoundError(`No task with id ${taskId}`);
   }
-   res.status(StatusCodes.OK).send('record deleted');
+   res.status(StatusCodes.OK).json({deleted:true});
 }
 
 module.exports = {

@@ -3,7 +3,7 @@ import {v4 as uuidv4} from 'uuid';
 import { FaPlus } from "react-icons/fa";
 import CreateNewClass from './CreateNewClass';
 
-function CreateClasses({classes, setClasses}) {
+function CreateClasses({classes, setClasses,setCreated}) {
 
 
     const [showMyModel, setShowMyModal] = useState(false);
@@ -22,7 +22,7 @@ function CreateClasses({classes, setClasses}) {
             </div>
         </button>
         </div>
-        <CreateNewClass onClose={handleOnClose} visible={showMyModel} classes = {classes} setClasses = {setClasses}/>
+        <CreateNewClass onClose={handleOnClose} visible={showMyModel} classes = {classes} setClasses = {setClasses} setCreated={setCreated}/>
     
     </div>
   )

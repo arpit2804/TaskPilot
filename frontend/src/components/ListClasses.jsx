@@ -2,19 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { useDrag, useDrop } from 'react-dnd';
 import { MdDelete } from "react-icons/md";
 
-export default function ListClasses({ classes, setClasses }) {
+export default function ListClasses({ classes, setClasses,setDeleted }) {
     const [pending, setPending] = useState([]);
     const [missed, setMissed] = useState([]);
     const [ongoing, setOngoing] = useState([]);
     const [completed, setCompleted] = useState([]);
 
     useEffect(() => {
-        const fpending = classes.filter((task) => task.status === 'pending')
-        const fmissed = classes.filter((task) => task.status === 'missed')
-        const fongoing = classes.filter((task) => task.status === 'ongoing')
-        const fcompleted = classes.filter((task) => task.status === 'completed')
-
-        
+        console.log(classes)
+         const fpending = classes.filter((task) => task.status == 'pending')
+        const fmissed = classes.filter((task) => task.status == 'missed')
+        const fongoing = classes.filter((task) => task.status == 'ongoing')
+        const fcompleted = classes.filter((task) => task.status == 'completed')
 
         setPending(fpending);
         setMissed(fmissed);
@@ -27,7 +26,7 @@ export default function ListClasses({ classes, setClasses }) {
         <div>
             <div className='flex justify-around mx-5 mt-10 items-start  '>
                 {statuses.map((status, index) => <Section key={index} status={status} classes={classes} setClasses={setClasses} pending={pending}
-                    ongoing={ongoing} completed={completed} missed={missed} />)}
+                    ongoing={ongoing} completed={completed} missed={missed} setDeleted={setDeleted} />)}
             </div>
         </div>
     )
@@ -40,6 +39,7 @@ const Section = ({ status,
     ongoing,
     completed,
     missed,
+    setDeleted
 }) => {
 
     const [{ isOver }, drop] = useDrop(() => ({
@@ -79,7 +79,7 @@ const Section = ({ status,
     const addItemToSection = (id) =>{
         setClasses((prev)=>{
             const mClasses = prev.map(t=>{
-                if(t.id === id){
+                if(t.classId === id){
                     return {...t, status: status}
                 }
                 return t;
@@ -95,7 +95,7 @@ const Section = ({ status,
             </div>
             <div>
 
-                {classestomap.length > 0 && classestomap.map((task) => <Task key={task.id} classes={classes} setClasses={setClasses} task={task} />)}
+                {classestomap.length > 0 && classestomap.map((task) => <Task key={task.classId} classes={classes} setClasses={setClasses} task={task} setDeleted={setDeleted} />)}
             </div>
 
         </div>
@@ -113,14 +113,38 @@ const Header = ({ text, bg, count }) => {
     )
 }
 
-const Task = ({ classes, setClasses, task }) => {
+const Task = ({ classes, setClasses, task,setDeleted }) => {
     const [{ isDragging }, drag] = useDrag(() => ({
         type: "task",
-        item: {id: task.id},
+        item: {id: task.classId},
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging()
         })
     }))
+
+    const handleDelete = async(id)=>{
+        console.log(id);
+        const token = localStorage.getItem('jwt');
+        try {
+          await fetch(`http://localhost:3000/api/v1/classes/${id}`,
+          {
+              method: 'DELETE',
+              headers: {
+                  'Content-Type' : 'application/json;charset=utf-8',
+                  'Authorization' : `Bearer ${token}`
+              },
+          })
+          .then(res=>res.json()).then((result)=>{
+              console.log(result);
+              setDeleted((prev)=> !prev);
+              //setTasks([...tasks, result.task]);
+              //return result.task;
+          })
+      } catch (error) {
+          console.log("error",error);
+          //setDeleted(true);
+      }
+    }
     // console.log(item.id)
 
     //console.log(task.id)
@@ -134,7 +158,7 @@ const Task = ({ classes, setClasses, task }) => {
             <div className='flex justify-between items-center'>
             <p>{task.name}</p>
             <button>
-                <div className=' text-red-600 text-xl'><MdDelete/></div>
+                <div className=' text-red-600 text-xl'><MdDelete onClick={()=>handleDelete(task.classId)}/></div>
             </button>
             </div>
         </div>
